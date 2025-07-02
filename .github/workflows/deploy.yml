@@ -11,7 +11,7 @@ jobs:
     
     steps:
       - name: Checkout source code
-        uses: actions/checkout@vs
+        uses: actions/checkout@v3
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
