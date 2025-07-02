@@ -12,6 +12,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+      - name: Test if secret is stored
+        run: |
+          if [ -z "${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}" ]; then
+            echo "❌ Secret is EMPTY"
+            exit 1
+          else
+            echo "✅ Secret is PRESENT"
+          fi
 
       - name: Azure Login
         uses: azure/login@v1
