@@ -27,5 +27,5 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: sql-tutor-app
-          images: sql-tutor-app
+          package: sql-tutor-app.tar.gz
 
