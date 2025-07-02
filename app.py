@@ -1,10 +1,16 @@
-from llama_cpp import Llama
-import gradio as gr
+import os
+import requests
 
-# Load quantized Phi-3 Mini Q6_K model
-model_path = r"C:\Users\gxp170004\.ai-navigator\models\microsoft\Phi-3-mini-4k-instruct\Phi-3-Mini-4K-Instruct_Q6_K.gguf"
-llm = Llama(model_path=model_path, n_ctx=2048, verbose=False)
+MODEL_URL = "https://huggingface.co/genchangp/My_LLM_Learning/resolve/main/Phi-3-Mini-4K-Instruct_Q6_K.gguf"
+MODEL_PATH = "models/Phi-3-Mini-4K-Instruct_Q6_K.gguf"
 
+os.makedirs("models", exist_ok=True)
+
+if not os.path.exists(MODEL_PATH):
+    print("🔄 Downloading model from Hugging Face...")
+    with open(MODEL_PATH, "wb") as f:
+        f.write(requests.get(MODEL_URL).content)
+    print("✅ Model downloaded.")
 # Prompt template
 def build_prompt(user_input):
     return f"""You are a helpful and knowledgeable SQL tutor. Explain the following clearly. Use examples and SQL code blocks if needed.
