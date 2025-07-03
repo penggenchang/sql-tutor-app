@@ -1,3 +1,4 @@
+
 name: Build and Deploy SQL Tutor App
 
 on:
@@ -36,4 +37,3 @@ jobs:
         with:
           app-name: sql-tutor-app
           package: sql-tutor-app.tar.gz
-
