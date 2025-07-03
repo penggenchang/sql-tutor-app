@@ -1,22 +1,27 @@
+print("starting app.py")
 import os
 import requests
+import gradio as gr
+from llama_cpp import Llama
 
-MODEL_URL = "https://huggingface.co/genchangp/My_LLM_Learning/resolve/main/Phi-3-Mini-4K-Instruct_Q6_K.gguf"
 MODEL_PATH = "models/Phi-3-Mini-4K-Instruct_Q6_K.gguf"
 
 os.makedirs("models", exist_ok=True)
 
 if not os.path.exists(MODEL_PATH):
-    print("🔄 Downloading model from Hugging Face...")
-    with open(MODEL_PATH, "wb") as f:
-        f.write(requests.get(MODEL_URL).content)
-    print("✅ Model downloaded.")
+    raise FileNotFoundError(f"❌ Model file not found at {MODEL_PATH}")
+
+print("📦 Loading model...")
+llm = Llama(model_path=MODEL_PATH, n_ctx=2048, verbose=False)
+print("✅ Model loaded.")
+
 # Prompt template
 def build_prompt(user_input):
     return f"""You are a helpful and knowledgeable SQL tutor. Explain the following clearly. Use examples and SQL code blocks if needed.
 
 User: {user_input}
 AI:"""
+
 
 # Chat history log
 chat_history = []
@@ -34,7 +39,8 @@ def generate_response(user_input, history):
     if "SELECT" in response or "FROM" in response:
         response = f"```sql\n{response}\n```"
 
-    history.append([user_input, response])
+    history.append({"role": "user", "content": user_input})
+    history.append({"role": "assistant", "content": response})
     chat_history.append(f"Q: {user_input}\nA: {response}\n")
 
     return history
@@ -93,8 +99,9 @@ with gr.Blocks() as demo:
         submit_btn = gr.Button("Ask")
         export_btn = gr.Button("Download Q&A")
 
-    chatbot = gr.Chatbot(label="Conversation History")
-    
+    chatbot = gr.Chatbot(label="Conversation History", type="messages")
+
+
     # Events
     def fill_from_dropdown(choice):
         return gr.update(value=choice)
@@ -105,4 +112,5 @@ with gr.Blocks() as demo:
     export_btn.click(fn=export_chat, outputs=gr.File())
 
 #demo.launch()
-demo.launch(server_name="0.0.0.0", server_port=7860)
+if __name__ == "__main__":
+    demo.launch(server_name="0.0.0.0", server_port=7861)
