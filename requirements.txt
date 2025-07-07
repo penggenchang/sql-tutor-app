@@ -1,3 +1,0 @@
-gradio
-llama-cpp-python==0.2.75
-requests
