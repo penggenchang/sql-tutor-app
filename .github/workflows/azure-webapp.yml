@@ -1,4 +1,4 @@
-name: Deploy to Azure Web App - SQL Tutor OpenAI
+name: Deploy to Azure Web App with Azure Login
 
 on:
   push:
@@ -23,10 +23,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements_openai.txt
 
-      - name: Upload to Azure Web App
+      - name: Azure login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: sql-tutor-openai   # ← replace this with your exact app name
+          app-name: sql-tutor-openai   # ⬅️ Update if needed
           slot-name: production
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: .
