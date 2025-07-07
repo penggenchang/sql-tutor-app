@@ -1,4 +1,10 @@
 # sql_tutor_openai.py
+import subprocess
+import sys
+
+# Auto-install required packages if missing
+required = ["gradio", "openai", "python-dotenv", "requests"]
+subprocess.check_call([sys.executable, "-m", "pip", "install", *required])
 
 import os
 import gradio as gr
